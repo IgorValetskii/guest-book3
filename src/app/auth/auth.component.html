@@ -1,0 +1,17 @@
+<form [formGroup]="myFirstReactiveForm" (submit)="onSubmit()" *ngIf="myFirstReactiveForm">
+  <label for="email">Email</label>
+  <input type="text" id="email" formControlName="email"  />
+  <br/><br/>
+
+  <label for="password">Password</label>
+  <input type="text" id="password" formControlName="password" />
+  <br/><br/>
+
+  <button type="submit">Send</button>
+</form>
+
+<!--<div *ngIf="done">-->
+<!--  <div>Получено от сервера:</div>-->
+<!--  <div>Имя: {{receivedUser.name}}</div>-->
+<!--  <div>Возраст: {{receivedUser.age}}</div>-->
+<!--</div>-->

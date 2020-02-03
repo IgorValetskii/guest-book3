@@ -1,0 +1,30 @@
+<form [formGroup]="mySecondReactiveForm" (submit)="onSubmit()" *ngIf="mySecondReactiveForm">
+
+  <label for="avatar">Avatar</label>
+  <input type="file" id="avatar" formControlName="avatar" />
+  <br/><br/>
+
+  <label for="name">Name</label>
+  <input type="text" id="name" formControlName="name" />
+  <br/><br/>
+
+  <label for="email">Email</label>
+  <input type="text" id="email" formControlName="email" />
+  <br/><br/>
+
+
+  <div class="error" *ngIf="isControlInvalid('name')">
+    Имя должно состоять только из английских букв
+  </div>
+
+  <label for="password">Password</label>
+  <input type="text" id="password" formControlName="password" />
+  <br/><br/>
+
+  <label for="password_confirmation">Password confirm</label>
+  <input type="text" id="password_confirmation" formControlName="password_confirmation" />
+  <br/><br/>
+
+  <button type="submit">Send</button>
+</form>
+
