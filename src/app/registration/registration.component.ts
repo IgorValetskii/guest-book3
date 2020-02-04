@@ -3,6 +3,8 @@ import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {HttpService} from '../http.service';
 import {User} from '../user';
 
+import {Router} from '@angular/router';
+
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
@@ -43,7 +45,9 @@ export class RegistrationComponent implements OnInit {
         (data: User) => {
           this.receivedUser = data;
           this.done = true;
-          console.log(this.receivedUser);
+          // console.log(this.receivedUser);
+          console.log(this.receivedUser.token.access_token);
+          localStorage.setItem('access-token', this.receivedUser.token.access_token);
         },
         error => console.log(error)
       );
