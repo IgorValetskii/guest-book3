@@ -64,10 +64,10 @@ export class AuthComponent implements OnInit {
         (data: any) => {
           this.receivedUser = data;
           this.done = true;
-          console.log(this.receivedUser);
+          console.log(this.receivedUser.name);
           console.log(this.receivedUser.token.access_token);
           localStorage.setItem('access-token', this.receivedUser.token.access_token);
-          localStorage.setItem('user', this.receivedUser);
+          localStorage.setItem('user', this.receivedUser.name);
           this.goToProfile();
         },
         error => console.log(error)

@@ -10,6 +10,11 @@ import { RegistrationComponent } from './registration/registration.component';
 import {HttpClientModule} from '@angular/common/http';
 import { ProfileComponent } from './profile/profile.component';
 
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import {JWTInterceptor} from './interceptor';
+import {WebsocketModule} from './websocket/websocket.module';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,8 +27,13 @@ import { ProfileComponent } from './profile/profile.component';
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
+    WebsocketModule.config({
+      url: 'ws://guest-book.naveksoft.com'
+    })
   ],
-  providers: [],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
