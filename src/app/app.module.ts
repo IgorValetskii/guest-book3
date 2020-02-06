@@ -27,9 +27,10 @@ import {WebsocketModule} from './websocket/websocket.module';
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    WebsocketModule.config({
-      url: 'ws://guest-book.naveksoft.com'
-    })
+    // WebsocketModule.config({
+    //   url: 'https://guest-book.naveksoft.com/broadcasting/auth'
+    //   // url: 'wss://echo.websocket.org/'
+    // })
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true}

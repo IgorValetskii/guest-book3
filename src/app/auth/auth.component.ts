@@ -57,17 +57,20 @@ export class AuthComponent implements OnInit {
     }
 
     /** TODO: Обработка данных формы */
-    console.log(this.myFirstReactiveForm.value);
+    // console.log(this.myFirstReactiveForm.value);
 
     this.httpService.postUser(this.myFirstReactiveForm.value)
       .subscribe(
         (data: any) => {
           this.receivedUser = data;
           this.done = true;
-          console.log(this.receivedUser.name);
-          console.log(this.receivedUser.token.access_token);
+          // console.log(this.receivedUser);
+          // console.log(this.receivedUser.token.access_token);
+
           localStorage.setItem('access-token', this.receivedUser.token.access_token);
-          localStorage.setItem('user', this.receivedUser.name);
+          localStorage.setItem('user', this.receivedUser.user.name);
+          localStorage.setItem('userId', this.receivedUser.user.id);
+
           this.goToProfile();
         },
         error => console.log(error)

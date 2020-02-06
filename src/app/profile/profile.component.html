@@ -1,20 +1,32 @@
 <div class="content-box">
+  <button (click)="logout()">Logout</button>
   <h1 class='welcome'>Welcome {{userName}} ! </h1>
   <h3>Posts:</h3>
 
   <div *ngIf="posts">
 
-    <div *ngFor="let post of posts">
+    <div class="post" *ngFor="let post of posts">
       User: {{post.user.name}} {{post.user.email}}
       <div> Message: {{post.message}}</div>
-      <button>See the answers</button>
+<!--      <button>See answers</button>-->
+
+      <div>Answers:
+<!--          <div *ngIf="this.postId == '12'"> 12</div>-->
+      <div *ngIf="testAnswer"> {{testAnswer}}</div>
+
+      </div>
     </div>
 
   </div>
 
   <form [formGroup]="messageReactiveForm" (submit)="onSubmit()" *ngIf="messageReactiveForm">
+
+    <label for="title">Title</label>
+    <input type="text" id="title" formControlName="title"/>
+    <br/><br/>
+
     <label for="message">Message</label>
-    <input type="text" id="message" formControlName="message"  />
+    <input type="text" id="message" formControlName="message"/>
     <br/><br/>
 
 

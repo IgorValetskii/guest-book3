@@ -23,4 +23,12 @@ export class HttpService {
   getPosts() {
     return this.http.get('https://guest-book.naveksoft.com/api/v1/posts');
   }
+
+  postMessage(message: any) {
+    return this.http.post('https://guest-book.naveksoft.com/api/v1/posts', message);
+  }
+
+  postAnswer(message: any){
+    return this.http.post('https://guest-book.naveksoft.com/api/v1/posts/12/answers', message);
+  }
 }

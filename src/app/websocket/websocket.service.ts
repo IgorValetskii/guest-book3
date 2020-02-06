@@ -82,7 +82,8 @@ export class WebsocketService implements IWebsocketService, OnDestroy {
       });
 
     // говорим, что что-то пошло не так
-    this.websocketSub = this.wsMessages$.subscribe(
+    this.websocketSub = this.wsMessages$
+      .subscribe(
       null, (error: ErrorEvent) => console.error('WebSocket error!', error)
     );
 
@@ -92,6 +93,7 @@ export class WebsocketService implements IWebsocketService, OnDestroy {
   }
 
   private connect(): void {
+    console.log('сработал коннект вебсокета');
     this.websocket$ = new WebSocketSubject(this.config); // создаем
 // если есть сообщения, шлем их в дальше,
 // если нет, ожидаем
