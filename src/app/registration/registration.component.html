@@ -1,30 +1,37 @@
-<form [formGroup]="mySecondReactiveForm" (submit)="onSubmit()" *ngIf="mySecondReactiveForm">
+<div class="col-md-6 offset-md-3 mt-5">
+  <div class="card-body">
+    <form [formGroup]="mySecondReactiveForm" (submit)="onSubmit()" *ngIf="mySecondReactiveForm">
+      <div class="form-group">
+        <label class="custom-file-label" for="avatar">Avatar</label>
+        <input class="custom-file-input"  type="file" id="avatar" formControlName="avatar"/>
 
-  <label for="avatar">Avatar</label>
-  <input type="file" id="avatar" formControlName="avatar" />
-  <br/><br/>
+<!--        <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">-->
+<!--        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>-->
+      </div>
 
-  <label for="name">Name</label>
-  <input type="text" id="name" formControlName="name" />
-  <br/><br/>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input class="form-control" type="text" id="name" formControlName="name"/>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input class="form-control" type="text" id="email" formControlName="email"/>
 
-  <label for="email">Email</label>
-  <input type="text" id="email" formControlName="email" />
-  <br/><br/>
 
+        <div class="error" *ngIf="isControlInvalid('name')">
+          Имя должно состоять только из английских букв
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input class="form-control" type="text" id="password" formControlName="password"/>
+      </div>
 
-  <div class="error" *ngIf="isControlInvalid('name')">
-    Имя должно состоять только из английских букв
+      <div class="form-group">
+        <label for="password_confirmation">Password confirm</label>
+        <input class="form-control" type="text" id="password_confirmation" formControlName="password_confirmation"/>
+      </div>
+      <button class="btn btn-primary" type="submit">Send</button>
+    </form>
   </div>
-
-  <label for="password">Password</label>
-  <input type="text" id="password" formControlName="password" />
-  <br/><br/>
-
-  <label for="password_confirmation">Password confirm</label>
-  <input type="text" id="password_confirmation" formControlName="password_confirmation" />
-  <br/><br/>
-
-  <button type="submit">Send</button>
-</form>
-
+</div>

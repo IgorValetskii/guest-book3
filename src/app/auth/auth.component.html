@@ -1,16 +1,27 @@
-<form [formGroup]="myFirstReactiveForm" (submit)="onSubmit()" *ngIf="myFirstReactiveForm">
-  <label for="email">Email</label>
-  <input type="text" id="email" formControlName="email"  />
-  <br/><br/>
-  <div class="error" *ngIf="isControlInvalid('email')">
-    Некорректный email
+<div class="col-md-6 offset-md-3 mt-5">
+  <div class="alert alert-info">
+    Username: test_register@mail.com<br/>
+    Password: 1q2w3e4r
   </div>
+  <div class="card-body">
+    <form [formGroup]="myFirstReactiveForm" (submit)="onSubmit()" *ngIf="myFirstReactiveForm">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input class="form-control" type="text" id="email" formControlName="email"/>
+        <br/><br/>
+        <div class="error" *ngIf="isControlInvalid('email')">
+          Некорректный email
+        </div>
+      </div>
 
-  <label for="password">Password</label>
-  <input type="text" id="password" formControlName="password" />
-  <br/><br/>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input class="form-control" type="text" id="password" formControlName="password"/>
+        <br/><br/>
+      </div>
+      <button class="btn btn-primary" type="submit">Send</button>
 
-  <button type="submit">Send</button>
-
-  <div>{{myFirstReactiveForm.value | json}} </div>
-</form>
+      <!--    <div>{{myFirstReactiveForm.value | json}} </div>-->
+    </form>
+  </div>
+</div>

@@ -1,15 +1,51 @@
-.content-box{
-  //display: flex;
-  //width: 100%;
-}
-.welcome {
-  //display: flex;
-  //justify-content: center;
-  //width: 100%;
-  //margin: 0 auto;
-  //font-size: 50px;
+//.content-box{
+//  //display: flex;
+//  //width: 100%;
+//}
+//.welcome {
+//  //display: flex;
+//  //justify-content: center;
+//  //width: 100%;
+//  //margin: 0 auto;
+//  //font-size: 50px;
+//}
+//
+.posts-block {
+  .post{
+    //margin: 20px;
+  }
+
+  .user {
+    display: inline-block;
+    width: 200px;
+    margin: 0 auto;
+    position: relative;
+    border: 2px solid #574159;
+    //width: 20%;
+  }
+
+  .message {
+    display: inline-block;
+    position: relative;
+    margin-left: 100px;
+  }
+
+  .answers-block{
+
+    .answer{
+
+      //position: absolute;
+      //top: 50px
+
+    }
+  }
+
+
 }
 
-.post{
-  margin: 20px;
-}
+
+
+
+
+
+

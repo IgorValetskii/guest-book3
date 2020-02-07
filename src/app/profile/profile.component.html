@@ -1,40 +1,72 @@
-<div class="content-box">
-  <button (click)="logout()">Logout</button>
-  <h1 class='welcome'>Welcome {{userName}} ! </h1>
-  <h3>Posts:</h3>
+<!--<div class="col-md-6 offset-md-3 mt-5">-->
+<div>
+  <button class="btn btn-primary" (click)="logout()">Logout</button>
+  <h1>Welcome {{userName}} ! </h1>
 
-  <div *ngIf="posts">
+  <div>
+    <h3>Posts:</h3>
 
-    <div class="post" *ngFor="let post of posts">
-      User: {{post.user.name}} {{post.user.email}}
-      <div> Message: {{post.message}}</div>
-<!--      <button>See answers</button>-->
 
-      <div>Answers:
-<!--          <div *ngIf="this.postId == '12'"> 12</div>-->
-      <div *ngIf="testAnswer"> {{testAnswer}}</div>
+    <div class="posts-block" *ngIf="posts">
 
+      <a class="post" routerLink="/answers/{{post.id}}" *ngFor="let post of posts">
+
+          <div class="user"> User: {{post.user.name}} {{post.user.email}} </div>
+
+          <div class="message"> Message: {{post.message}}</div>
+
+          <div class="answers-block">
+
+<!--            <button (click)="getAnswers($event  )">Show answers</button>-->
+            <!--        </div>-->
+            <!--                  <div class="answer">Answers:-->
+            <!--                    &lt;!&ndash;          <div *ngIf="this.postId == '12'"> 12</div>&ndash;&gt;-->
+            <!--                    <div *ngIf="testAnswer"> {{testAnswer}}</div>-->
+            <!--                  </div>-->
+            <!--      </div>-->
+          </div>
+
+      </a>
+
+      <div class="card-body">
+        <form [formGroup]="messageReactiveForm" (submit)="onSubmit()" *ngIf="messageReactiveForm">
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input class="form-control" type="text" id="title" formControlName="title"/>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <input class="form-control" type="text" id="message" formControlName="message"/>
+          </div>
+
+          <button class="btn btn-primary" type="submit">Send</button>
+
+        </form>
       </div>
+
     </div>
 
   </div>
-
-  <form [formGroup]="messageReactiveForm" (submit)="onSubmit()" *ngIf="messageReactiveForm">
-
-    <label for="title">Title</label>
-    <input type="text" id="title" formControlName="title"/>
-    <br/><br/>
-
-    <label for="message">Message</label>
-    <input type="text" id="message" formControlName="message"/>
-    <br/><br/>
-
-
-    <button type="submit">Send</button>
-
-  </form>
-
 </div>
+
+<!--</div>-->
+
+<!--</div>-->
+
+<!--<p>-->
+<!--  <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">-->
+<!--    Ссылка с href-->
+<!--  </a>-->
+<!--  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">-->
+<!--    Кнопка с data-target-->
+<!--  </button>-->
+<!--</p>-->
+<!--<div class="collapse" id="collapseExample">-->
+<!--  <div class="card card-body">-->
+<!--    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.-->
+<!--  </div>-->
+<!--</div>-->
+<!--<div>123</div>-->
 <!--<li *ngFor="let hero of heroes">-->
 <!--  <a routerLink="/detail/{{hero.id}}">-->
 <!--    <span class="badge">{{hero.id}}</span> {{hero.name}}-->

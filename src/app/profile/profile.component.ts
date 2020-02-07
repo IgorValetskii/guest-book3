@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {HttpService} from '../http.service';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 
 // import {WebsocketService} from '../websocket/websocket.service';
 import {SocketEchoService} from '../socket-echo.service';
+import {ProfileService} from './profile.service';
 import {WS} from '../websocket/websocket.events';
 import {Router} from '@angular/router';
+import {Subject} from 'rxjs';
 
 export interface IMessage {
   id: number;
@@ -31,7 +33,15 @@ export class ProfileComponent implements OnInit {
   postId: any;
   testAnswer: any;
 
-  constructor(private fb: FormBuilder, private httpService: HttpService, private router: Router, private socketEchoService: SocketEchoService) {
+  allposts: any = new Subject();
+
+  constructor(
+    private fb: FormBuilder,
+    private httpService: HttpService,
+    private router: Router,
+    private socketEchoService: SocketEchoService,
+    private profileService: ProfileService
+  ) {
     // this.wsService.on<IMessage[]>('messages')
     //   .subscribe((messages: IMessage[]) => {
     //     console.log(messages);
@@ -53,10 +63,17 @@ export class ProfileComponent implements OnInit {
       .subscribe(
         (data: any) => {
           this.recievedData = data;
-          // console.log(this.recievedData);
+          console.log(this.recievedData.data);
+
+          // this.recievedData.data
+
           // console.log(this.recievedData.data[0].user.name);
 
           this.posts = this.recievedData.data;
+
+          this.profileService.getPosts(this.posts);
+
+          this.allposts.next(this.posts); // полученный массив постов прокидываю дальше на подписчиков
 
           this.userName = localStorage.getItem('user');
           // console.log(this.userName);
@@ -65,13 +82,12 @@ export class ProfileComponent implements OnInit {
 
 
         },
-      error => console.log(error)
+        error => console.log(error)
       );
 
-
     this.initForm();
-    this.showAllAnswers();
 
+    this.showAllAnswers();
 
   }
 
@@ -83,14 +99,14 @@ export class ProfileComponent implements OnInit {
       ]
       ],
 
-      title : ['AAAAAAAA', [
+      title: ['AAAAAAAA', [
         Validators.required,
       ]
       ],
     });
   }
 
-  onSubmit(){
+  onSubmit() {
     const controls = this.messageReactiveForm.controls;
 
     /** Проверяем форму на валидность */
@@ -154,7 +170,7 @@ export class ProfileComponent implements OnInit {
     this.router.navigate(['login']);
   }
 
-  showAllAnswers(){
+  showAllAnswers() {
     this.socketEchoService.subject
       .subscribe(
         v => {
@@ -162,8 +178,16 @@ export class ProfileComponent implements OnInit {
           this.testAnswer = v;
 
         }
-    );
+      );
 
   }
+
+ //  getAnswers(event) {
+ //    // this.httpService.getAnswers(this.postId);
+ // // {{post.user.id}}
+ //
+ //    console.log(event);
+ //    // console.log(id);
+ //  }
 
 }

@@ -13,6 +13,7 @@ import { ProfileComponent } from './profile/profile.component';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {JWTInterceptor} from './interceptor';
 import {WebsocketModule} from './websocket/websocket.module';
+import { AnswersComponent } from './answers/answers.component';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import {WebsocketModule} from './websocket/websocket.module';
     AuthComponent,
     RegistrationComponent,
     ProfileComponent,
+    AnswersComponent,
   ],
   imports: [
     BrowserModule,
