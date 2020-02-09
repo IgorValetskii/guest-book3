@@ -2,8 +2,9 @@ import {Component, OnInit} from '@angular/core';
 
 import {ActivatedRoute} from '@angular/router';
 import {Location} from '@angular/common';
-import {AnswersService} from '../answers.service';
+import {AnswersService} from './answers.service';
 import {ProfileService} from '../profile/profile.service';
+import {HttpService} from '../http.service';
 
 @Component({
   selector: 'app-answers',
@@ -12,8 +13,15 @@ import {ProfileService} from '../profile/profile.service';
 })
 export class AnswersComponent implements OnInit {
   post: any;
+  receivedData: any;
 
-  constructor(private route: ActivatedRoute, private location: Location, private answersService: AnswersService, private profileService: ProfileService) {
+  constructor(
+    private route: ActivatedRoute,
+    private location: Location,
+    private answersService: AnswersService,
+    private profileService: ProfileService,
+    private httpService: HttpService
+  ) {
   }
 
   ngOnInit() {
@@ -22,7 +30,17 @@ export class AnswersComponent implements OnInit {
 
   getAnswer() {
     const id = +this.route.snapshot.paramMap.get('id');
-    this.answersService.getPost(id)
-      .subscribe(post => this.post = post);
+    console.log(id);
+    this.httpService.getAnswers(id)
+      .subscribe(
+        (data: any) => {
+          this.receivedData = data.data;
+          console.log(this.receivedData);
+
+        },
+        error => console.log(error)
+      );
+    // this.answersService.getPost(id)
+    //   .subscribe(post => this.post = post);
   };
 }

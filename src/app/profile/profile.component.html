@@ -11,9 +11,9 @@
 
       <a class="post" routerLink="/answers/{{post.id}}" *ngFor="let post of posts">
 
-          <div class="user"> User: {{post.user.name}} {{post.user.email}} </div>
+          <div class="user"> {{post.user.name}} {{post.user.email}} </div>
 
-          <div class="message"> Message: {{post.message}}</div>
+          <div class="message">{{post.message}}</div>
 
           <div class="answers-block">
 

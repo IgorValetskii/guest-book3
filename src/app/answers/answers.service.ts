@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
-import {ProfileService} from './profile/profile.service';
+import {ProfileService} from '../profile/profile.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,5 +15,4 @@ export class AnswersService {
     return of(this.data.find(post => post.id === id));
   }
 
-  this.profileService.
 }

@@ -4,7 +4,7 @@ import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 
 // import {WebsocketService} from '../websocket/websocket.service';
 import {SocketEchoService} from '../socket-echo.service';
-import {ProfileService} from './profile.service';
+// import {ProfileService} from './profile.service';
 import {WS} from '../websocket/websocket.events';
 import {Router} from '@angular/router';
 import {Subject} from 'rxjs';
@@ -40,7 +40,7 @@ export class ProfileComponent implements OnInit {
     private httpService: HttpService,
     private router: Router,
     private socketEchoService: SocketEchoService,
-    private profileService: ProfileService
+    // private profileService: ProfileService
   ) {
     // this.wsService.on<IMessage[]>('messages')
     //   .subscribe((messages: IMessage[]) => {
@@ -71,9 +71,9 @@ export class ProfileComponent implements OnInit {
 
           this.posts = this.recievedData.data;
 
-          this.profileService.getPosts(this.posts);
-
-          this.allposts.next(this.posts); // полученный массив постов прокидываю дальше на подписчиков
+          // this.profileService.getPosts(this.posts);
+          //
+          // this.allposts.next(this.posts); // полученный массив постов прокидываю дальше на подписчиков
 
           this.userName = localStorage.getItem('user');
           // console.log(this.userName);
