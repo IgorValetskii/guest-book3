@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -13,7 +14,7 @@ import { ProfileComponent } from './profile/profile.component';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {JWTInterceptor} from './interceptor';
 import {WebsocketModule} from './websocket/websocket.module';
-import { AnswersComponent } from './answers/answers.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -22,13 +23,14 @@ import { AnswersComponent } from './answers/answers.component';
     AuthComponent,
     RegistrationComponent,
     ProfileComponent,
-    AnswersComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
+    BrowserAnimationsModule,
+    NgbModule,
     // WebsocketModule.config({
     //   url: 'https://guest-book.naveksoft.com/broadcasting/auth'
     //   // url: 'wss://echo.websocket.org/'

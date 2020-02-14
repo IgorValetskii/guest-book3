@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {HttpService} from '../http.service';
 import {User} from '../user';
@@ -12,11 +12,14 @@ import {Router} from '@angular/router';
 })
 export class RegistrationComponent implements OnInit {
 
-  user: User = new User(); // данные вводимого пользователя
-  receivedUser: User; // полученный пользователь
-  done: boolean = false;
+  user: any; // данные вводимого пользователя
+  receivedUser: any; // полученный пользователь
+  done = false;
+  avatar : string
 
-  constructor(private fb: FormBuilder, private httpService: HttpService) { }
+  constructor(private fb: FormBuilder, private httpService: HttpService,  private router: Router) {
+  }
+
   mySecondReactiveForm: FormGroup;
 
   ngOnInit() {
@@ -42,37 +45,39 @@ export class RegistrationComponent implements OnInit {
 
     this.httpService.postNewUser(this.mySecondReactiveForm.value)
       .subscribe(
-        (data: User) => {
+        (data: any) => {
           this.receivedUser = data;
           this.done = true;
-          // console.log(this.receivedUser);
-          console.log(this.receivedUser.token.access_token);
-          localStorage.setItem('access-token', this.receivedUser.token.access_token);
+          console.log(this.receivedUser);
+          // this.avatar = data.avatar;
+          this.router.navigate(['/profile']);
+          // console.log(this.receivedUser.token.access_token);
+          // localStorage.setItem('access-token', this.receivedUser.token.access_token);
         },
         error => console.log(error)
       );
 
   }
 
-  initForm(){
+  initForm() {
     this.mySecondReactiveForm = this.fb.group({
 
       avatar: [null, Validators.required],
 
-      name: ['vasya',[
+      name: ['vasya', [
         Validators.required,
         Validators.pattern(/[A-z]/)
       ]
       ],
-      email: ['test@gmail.com',[
+      email: ['test@gmail.com', [
         Validators.required, Validators.email
       ]
       ],
-      password: ['12345678',[
+      password: ['12345678', [
         Validators.required
       ]
       ],
-      password_confirmation: ['12345678',[
+      password_confirmation: ['12345678', [
         Validators.required
       ]
       ]

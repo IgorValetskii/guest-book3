@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {Router} from '@angular/router';
+
+import {AuthenticationService} from './auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +9,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'guest-book';
+  get currentUser() {
+    return this.authenticationService.user;
+  }
+
+  constructor(
+    private router: Router,
+    private authenticationService: AuthenticationService
+  ) {
+  }
+
 }

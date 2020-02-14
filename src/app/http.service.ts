@@ -10,9 +10,11 @@ export class HttpService {
   constructor(private http: HttpClient) {
   }
 
-  postUser(user: User) {
+  postUser(email: string, password: string) {
     // const body = {email: user.email, password: user.password};
-    return this.http.post('https://guest-book.naveksoft.com/api/v1/auth/login', user);
+    console.log({email, password});
+    // tslint:disable-next-line:no-debugger
+    return this.http.post('https://guest-book.naveksoft.com/api/v1/auth/login', { email, password});
   }
 
   postNewUser(user: User) {
@@ -20,19 +22,6 @@ export class HttpService {
     return this.http.post('https://guest-book.naveksoft.com/api/v1/auth/register', user);
   }
 
-  getPosts() {
-    return this.http.get('https://guest-book.naveksoft.com/api/v1/posts');
-  }
 
-  postMessage(message: any) {
-    return this.http.post('https://guest-book.naveksoft.com/api/v1/posts', message);
-  }
 
-  postAnswer(message: any) {
-    return this.http.post('https://guest-book.naveksoft.com/api/v1/posts/10/answers', message);
-  }
-
-  getAnswers(postId: any) {
-    return this.http.get(`https://guest-book.naveksoft.com/api/v1/posts/${postId}/answers`);
-  }
 }

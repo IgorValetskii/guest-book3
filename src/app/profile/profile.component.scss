@@ -1,51 +1,106 @@
-//.content-box{
-//  //display: flex;
-//  //width: 100%;
-//}
-//.welcome {
-//  //display: flex;
-//  //justify-content: center;
-//  //width: 100%;
-//  //margin: 0 auto;
-//  //font-size: 50px;
-//}
-//
+
 .posts-block {
-  .post{
-    //margin: 20px;
+  .post {
+    //border: 2px solid #cc1c0a;
+    background-color: #eee;
+    //border-radius: 5px;
+    padding: 16px;
+    margin: 16px 0;
+
+    //.user {
+    //  display: inline-block;
+    //  //width: 200px;
+    //  //margin: 10px auto;
+    //  //position: relative;
+    //  //border: 2px solid #574159;
+    //  //width: 20%;
+    //}
+
+    .message {
+      //display: inline-block;
+      //position: relative;
+      //border: 1px solid blueviolet;
+      //margin-left: 100px;
+    }
+
+    .user-answer {
+      display: inline-block;
+      //margin-left: 100px;
+    }
+
+    .user-answer_message {
+      display: inline-block;
+      margin-left: 50px;
+    }
+
   }
 
+  .post::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+
+}
+
+.delete-post {
+  margin-left: 80%;
+}
+
+.answer {
+  //border: 2px solid #cc1c0a;
+  background-color: #eee;
+  //border-radius: 5px;
+  padding: 16px;
+  margin: 16px 0;
+  margin-left: 100px;
+
+  .user-answer {
+    font-size: 14px;
+  }
+
+  .user-answer img {
+    width: 70px;
+  }
+
+  .user-answer_message {
+
+  }
+}
+
+.user-block {
+  display: flex;
   .user {
-    display: inline-block;
-    width: 200px;
-    margin: 0 auto;
-    position: relative;
-    border: 2px solid #574159;
-    //width: 20%;
-  }
+    //display: inline-block;
 
-  .message {
-    display: inline-block;
-    position: relative;
-    margin-left: 100px;
-  }
+    .user-name {
 
-  .answers-block{
+    }
 
-    .answer{
-
-      //position: absolute;
-      //top: 50px
+    .user-email {
 
     }
   }
 
-
+ .message {
+    display:flex;
+   align-items: center;
+   padding-left: 50px;
+ }
 }
 
+.user-answer-block {
+  display: flex;
+  .user-answer{
 
+  }
 
-
-
+  .user-answer-message {
+    display:flex;
+    align-items: center;
+    padding-left: 50px;
+    font-size: 14px;
+  }
+}
 
 

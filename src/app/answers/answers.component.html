@@ -1,13 +1,18 @@
+<button class="btn btn-primary" (click)="logout()">Logout</button>
+<h1>Welcome {{userName}}!</h1>
 <h1>Answers:</h1>
 <div *ngIf="receivedData">
   <div class="answer-block" *ngFor="let answer of receivedData">
     <div class="user">{{answer.user.name}} {{answer.user.email}} </div>
     <div class="message">{{answer.message}} </div>
+    <button *ngIf="answer.user_id == this.checkUser()" (click)="deleteAnswer(answer.id)">Delete answer</button>
   </div>
 </div>
 
-<div class="card-body">
-  <form [formGroup]="messageReactiveForm" (submit)="onSubmit()" *ngIf="messageReactiveForm">
+<div class="card-body"
+     *ngIf="author">
+  <form [formGroup]="answerReactiveForm" (submit)="onSubmit()" *ngIf="answerReactiveForm">
+    <h3>Write answer</h3>
     <div class="form-group">
       <label for="title">Title</label>
       <input class="form-control" type="text" id="title" formControlName="title"/>

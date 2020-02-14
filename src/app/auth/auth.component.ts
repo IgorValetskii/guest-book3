@@ -2,7 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {HttpService} from '../http.service';
 import {User} from '../user';
-import {Router} from '@angular/router';
+import {Router, ActivatedRoute} from '@angular/router';
+import {first} from 'rxjs/operators';
+
+import {AuthenticationService} from './auth.service';
 
 @Component({
   selector: 'app-auth',
@@ -11,19 +14,31 @@ import {Router} from '@angular/router';
 })
 export class AuthComponent implements OnInit {
 
-  user: User = new User(); // данные вводимого пользователя
+  user: User; // данные вводимого пользователя
   receivedUser: any; // полученный пользователь
-  done: boolean = false;
+  done = false;
+  error = '';
+  returnUrl: string;
+  myFirstReactiveForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private httpService: HttpService, private router: Router ) {
+
+  constructor(private fb: FormBuilder,
+              private httpService: HttpService,
+              private router: Router,
+              private route: ActivatedRoute,
+              private authenticationService: AuthenticationService
+  ) {
   }
 
-  myFirstReactiveForm: FormGroup;
 
   ngOnInit() {
     this.initForm();
   }
 
+  // convenience getter for easy access to form fields
+  get f() {
+    return this.myFirstReactiveForm.controls;
+  }
 
   initForm() {
     this.myFirstReactiveForm = this.fb.group({
@@ -45,36 +60,33 @@ export class AuthComponent implements OnInit {
   onSubmit() {
     const controls = this.myFirstReactiveForm.controls;
 
-    /** Проверяем форму на валидность */
+    // /** Проверяем форму на валидность */
     if (this.myFirstReactiveForm.invalid) {
-      console.log('форма не валдина');
-      /** Если форма не валидна, то помечаем все контролы как touched*/
+      console.log('форма не валидна');
+      // /** Если форма не валидна, то помечаем все контролы как touched*/
       Object.keys(controls)
         .forEach(controlName => controls[controlName].markAsTouched());
 
-      /** Прерываем выполнение метода*/
+      // /** Прерываем выполнение метода*/
       return;
     }
 
     /** TODO: Обработка данных формы */
     // console.log(this.myFirstReactiveForm.value);
-
-    this.httpService.postUser(this.myFirstReactiveForm.value)
+    // console.log(this.f.email.value, this.f.password.value);
+    this.authenticationService.login(this.f.email.value, this.f.password.value)
+      .pipe(first())
       .subscribe(
-        (data: any) => {
-          this.receivedUser = data;
-          this.done = true;
-          // console.log(this.receivedUser);
-          // console.log(this.receivedUser.token.access_token);
-
-          localStorage.setItem('access-token', this.receivedUser.token.access_token);
-          localStorage.setItem('user', this.receivedUser.user.name);
-          localStorage.setItem('userId', this.receivedUser.user.id);
-
-          this.goToProfile();
+        data => {
+          console.log(data);
+          this.router.navigate(['/profile']);
         },
-        error => console.log(error)
-      );
+        error => {
+          this.error = error;
+          console.log(this.error);
+          console.log('неверный пасс');
+          // this.loading = false;
+        });
 
   }
 
@@ -84,10 +96,6 @@ export class AuthComponent implements OnInit {
     const result = control.invalid && control.touched;
 
     return result;
-  }
-
-  goToProfile() {
-    this.router.navigate(['profile']);
   }
 
 

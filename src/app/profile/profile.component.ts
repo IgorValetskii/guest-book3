@@ -1,13 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {HttpService} from '../http.service';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 
 // import {WebsocketService} from '../websocket/websocket.service';
 import {SocketEchoService} from '../socket-echo.service';
-// import {ProfileService} from './profile.service';
+import {ProfileService} from './profile.service';
 import {WS} from '../websocket/websocket.events';
 import {Router} from '@angular/router';
-import {Subject} from 'rxjs';
+import {AuthenticationService} from '../auth/auth.service';
 
 export interface IMessage {
   id: number;
@@ -19,135 +18,173 @@ export interface IMessage {
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
 
-  recievedData: any;
-  users: any;
-  name: any;
-  email: any;
-  posts: any;
-  userName: any;
-  receivedMessage: any; // полученный ответ после отправки сообщения
+  receivedData: any;
+  userName: string;
+  userId: string;
+  answers: any;
+  isAdmin: boolean;
 
-  done: any;
-  postId: any;
-  testAnswer: any;
-
-  allposts: any = new Subject();
+  showedAnswerId: string;
+  avatar: string;
 
   constructor(
     private fb: FormBuilder,
-    private httpService: HttpService,
     private router: Router,
     private socketEchoService: SocketEchoService,
-    // private profileService: ProfileService
+    private profileService: ProfileService,
+    private authenticationService: AuthenticationService
   ) {
-    // this.wsService.on<IMessage[]>('messages')
-    //   .subscribe((messages: IMessage[]) => {
-    //     console.log(messages);
-    //
-    //     this.wsService.send('text', 'Test Text!');
-    //   });
-    // this.wsService.on<IMessage[]>(WS.ON.MESSAGES)
-    //   .subscribe((messages: IMessage[]) => {
-    //     console.log(messages);
-    //
-    //     this.wsService.send(WS.SEND.TEXT, 'Test Text!');
-    //   });
   }
 
   messageReactiveForm: FormGroup;
+  answerReactiveForm: FormGroup;
 
   ngOnInit() {
-    this.httpService.getPosts()
+    this.profileService.getPosts()
       .subscribe(
         (data: any) => {
-          this.recievedData = data;
-          console.log(this.recievedData.data);
+          this.receivedData = data.data;
+          console.log(this.receivedData);
 
-          // this.recievedData.data
+          this.userName = JSON.parse(localStorage.getItem('currentUser')).user.name;
+          this.userId = JSON.parse(localStorage.getItem('currentUser')).user.id;
+          // this.avatar = JSON.parse(localStorage.getItem('currentUser')).user.avatar;
 
-          // console.log(this.recievedData.data[0].user.name);
+          if (JSON.parse(localStorage.getItem('currentUser')).user.is_admin === 1) {
+            this.isAdmin = true;
+          } else {
+            this.isAdmin = false;
+          }
+          console.log(this.isAdmin);
 
-          this.posts = this.recievedData.data;
 
-          // this.profileService.getPosts(this.posts);
-          //
-          // this.allposts.next(this.posts); // полученный массив постов прокидываю дальше на подписчиков
+          console.log(this.userName);
 
-          this.userName = localStorage.getItem('user');
-          // console.log(this.userName);
-
-          this.socketEchoService.initConnection();
+          // this.socketEchoService.initConnection();
 
 
         },
         error => console.log(error)
       );
 
+
     this.initForm();
 
-    this.showAllAnswers();
+    this.socketEchoService.subject
+      .subscribe(
+        v => {
 
+          // console.log(this.authenticationService.user._value.user);
+          console.log(1);
+          if (v && v.data.type === 'post_added') {
+            console.log(2);
+            if (this.authenticationService.user._value.user && this.authenticationService.user._value.user.id !== v.data.data.user_id) {
+              console.log(3);
+              this.receivedData.push(v.data.data);
+            }
+          }
+          console.log(this.authenticationService.user);
+          console.log(this.authenticationService.user._value.user.id);
+          console.log(v.data.data.user_id);
+
+          if (v && v.data.type === 'answer_added') {
+            console.log(4);
+
+            if (this.authenticationService.user._value.user && this.authenticationService.user._value.user.id !== v.data.data.user_id) {
+              console.log(5);
+              console.log(this.answers.data);
+              this.answers.data.push(v.data.data);
+            }
+          }
+
+        }
+      );
   }
 
   initForm() {
     this.messageReactiveForm = this.fb.group({
 
-      message: ['Hello all !', [
+      message: ['', [
         Validators.required,
       ]
       ],
 
-      title: ['AAAAAAAA', [
+      title: ['message title', [
         Validators.required,
       ]
       ],
     });
+
+    this.answerReactiveForm = this.fb.group({
+
+      message: ['answer', [
+        Validators.required,
+      ]
+      ],
+
+      // title: ['answer title', [
+      //   Validators.required,
+      // ]
+      // ],
+    });
   }
 
-  onSubmit() {
+  onSubmitPost() {
     const controls = this.messageReactiveForm.controls;
 
-    /** Проверяем форму на валидность */
+    // /** Проверяем форму на валидность */
     if (this.messageReactiveForm.invalid) {
       console.log('форма не валдина');
-      /** Если форма не валидна, то помечаем все контролы как touched*/
+      // /** Если форма не валидна, то помечаем все контролы как touched*/
       Object.keys(controls)
         .forEach(controlName => controls[controlName].markAsTouched());
 
-      /** Прерываем выполнение метода*/
+      // /** Прерываем выполнение метода*/
       return;
     }
 
     /** TODO: Обработка данных формы */
     console.log(this.messageReactiveForm.value);
 
-// // отправляет отзыв
-//     this.httpService.postMessage(this.messageReactiveForm.value)
-//       .subscribe(
-//         (data: any) => {
-//           this.receivedMessage = data;
-//           this.done = true;
-//           console.log(this.receivedMessage);
-//
-//         },
-//         error => console.log(error)
-//       );
-
-    // отправляет ответ на отзыв /////////////////////////////////////////////
-    this.httpService.postAnswer(this.messageReactiveForm.value)
+// отправляет отзыв
+    this.profileService.postMessage(this.messageReactiveForm.value)
       .subscribe(
         (data: any) => {
-          this.receivedMessage = data;
-          this.done = true;
-          console.log(this.receivedMessage);
+          // this.receivedMessage = data;
+          // this.done = true;
+          console.log(data);
+          this.receivedData.push(data);
+        },
+        error => console.log(error)
+      );
+  }
 
-          console.log(this.receivedMessage.post_id);
+  onSubmitAnswer(postId) {
+    const controls = this.answerReactiveForm.controls;
 
-          this.postId = this.receivedMessage.post_id;
+    // /** Проверяем форму на валидность */
+    if (this.answerReactiveForm.invalid) {
+      console.log('форма не валдина');
+      // /** Если форма не валидна, то помечаем все контролы как touched*/
+      Object.keys(controls)
+        .forEach(controlName => controls[controlName].markAsTouched());
 
-          console.log(this.postId === this.receivedMessage.post_id);
+      // /** Прерываем выполнение метода*/
+      return;
+    }
+
+    // /** TODO: Обработка данных формы */
+    console.log(this.answerReactiveForm.value);
+
+    // отправляет ответ на отзыв /////////////////////////////////////////////
+    this.profileService.postAnswer(this.answerReactiveForm.value, postId)
+      .subscribe(
+        (data: any) => {
+          this.answers.data.push(data);
+          console.log(data);
+          // console.log(data.post_id);
         },
         error => console.log(error)
       );
@@ -161,33 +198,67 @@ export class ProfileComponent implements OnInit {
     return result;
   }
 
-  logout() {
-    localStorage.clear();
-    this.goToLoggin();
-  }
 
-  goToLoggin() {
-    this.router.navigate(['login']);
-  }
+  deletePost(postId) {
+    // console.log(postId);
+    this.profileService.deletePost(postId)
+      .subscribe((data: any) => {
+          // this.receivedData = data;
+          console.log(data);
 
-  showAllAnswers() {
-    this.socketEchoService.subject
-      .subscribe(
-        v => {
-          console.log('Observer 1: ' + v);
-          this.testAnswer = v;
 
-        }
+        },
+        error => console.log(error)
       );
-
   }
 
- //  getAnswers(event) {
- //    // this.httpService.getAnswers(this.postId);
- // // {{post.user.id}}
- //
- //    console.log(event);
- //    // console.log(id);
- //  }
+  getAnswers(postId) {
+    this.showedAnswerId = postId;
+    this.profileService.getAnswers(postId)
+      .subscribe(data => {
+        console.log(data);
+        this.answers = data;
+        console.log(this.answers.data);
+
+
+      });
+  }
+
+  deleteAnswer(postId, answerId) {
+    console.log(postId);
+    console.log(answerId);
+
+    this.profileService.deleteAnswer(postId, answerId)
+      .subscribe((data: any) => {
+          // const result = this.receivedData.filter(el => el.id !== answerId);
+          // this.receivedData = result;
+          // console.log(result);
+          // console.log(this.receivedData);
+          console.log(data);
+        },
+        error => console.log(error)
+      );
+  }
+
+
+  logout() {
+    this.authenticationService.logout();
+    this.router.navigate(['/login']);
+  }
+
+  //
+  ngOnDestroy() {
+    this.socketEchoService.subject.unsubscribe();
+
+    console.log('сработал ондестрой');
+  }
+
+  //  getAnswers(event) {
+  //    // this.httpService.getAnswers(this.postId);
+  // // {{post.user.id}}
+  //
+  //    console.log(event);
+  //    // console.log(id);
+  //  }
 
 }

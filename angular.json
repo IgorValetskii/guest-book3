@@ -28,9 +28,13 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
               "src/styles.scss"
             ],
-            "scripts": ["node_modules/pusher-js/dist/web/pusher.min.js"]
+            "scripts": [
+              "node_modules/pusher-js/dist/web/pusher.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -93,9 +97,13 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
               "src/styles.scss"
             ],
-            "scripts": ["node_modules/pusher-js/dist/web/pusher.min.js"]
+            "scripts": [
+              "node_modules/pusher-js/dist/web/pusher.min.js"
+            ]
           }
         },
         "lint": {
@@ -124,6 +132,7 @@
           }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "guest-book"
 }

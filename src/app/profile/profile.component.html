@@ -1,35 +1,96 @@
 <!--<div class="col-md-6 offset-md-3 mt-5">-->
+<nav class="navbar navbar-expand navbar-dark bg-dark">
+  <div class="navbar-nav">
+    <!--    <a class="nav-item nav-link" routerLink="/">Home</a>-->
+    <a class="nav-item nav-link" (click)="logout()">Logout</a>
+    <!--    <a class="nav-link" routerLink="/registration">Registration</a>-->
+  </div>
+</nav>
+
 <div>
-  <button class="btn btn-primary" (click)="logout()">Logout</button>
-  <h1>Welcome {{userName}} ! </h1>
+  <!--  <button class="btn btn-primary" (click)="l">Logout</button>-->
+  <h1>Welcome {{userName}}! </h1>
 
   <div>
     <h3>Posts:</h3>
 
 
-    <div class="posts-block" *ngIf="posts">
+    <div class="posts-block" *ngIf="receivedData">
 
-      <a class="post" routerLink="/answers/{{post.id}}" *ngFor="let post of posts">
+      <div class="post" *ngFor="let post of receivedData">
 
-          <div class="user"> {{post.user.name}} {{post.user.email}} </div>
+      <div class="user-block">
+        <div class="user">
+          <img src="{{post.user.avatar}}" alt="Avatar">
+          <div class="user-name">{{post.user?.name }} </div>
+          <div class="user-email"> {{post.user?.email}}</div>
+        </div>
 
-          <div class="message">{{post.message}}</div>
+        <div class="message">{{post.message}}</div>
+      </div>
+<!--        <div class="answers-block"></div>-->
 
-          <div class="answers-block">
+        <div>
+          <div *ngIf="answers">
+            <div *ngIf="answers.data">
+              <div class="answer" *ngFor=" let answer of answers.data ">
 
-<!--            <button (click)="getAnswers($event  )">Show answers</button>-->
-            <!--        </div>-->
-            <!--                  <div class="answer">Answers:-->
-            <!--                    &lt;!&ndash;          <div *ngIf="this.postId == '12'"> 12</div>&ndash;&gt;-->
-            <!--                    <div *ngIf="testAnswer"> {{testAnswer}}</div>-->
-            <!--                  </div>-->
-            <!--      </div>-->
+                <div  *ngIf="post.id == answer.post_id">
+
+                  <div class="user-answer-block">
+                    <div class="user-answer">
+                      <img src="{{answer.user.avatar}}" alt="Avatar" >
+                      <div class="user-name">{{answer.user?.name}}</div>
+                      <div class="user-email"> {{answer.user?.email}}</div>
+                    </div>
+
+                    <div class="user-answer-message">{{answer.message}} </div>
+
+                  </div>
+
+                  <button type="button"  class="delete-post btn btn-outline-primary btn-sm " *ngIf="isAdmin?true: userId == answer?.user?.id "
+                          (click)="deleteAnswer(post?.id,answer?.id )">Delete answer
+                  </button>
+
+                </div>
+
+              </div>
+
+            </div>
           </div>
 
-      </a>
+          <button type="button" class="btn btn-outline-primary btn-sm active " aria-pressed="false" (click)="getAnswers(post.id)">Show answers
+          </button>
+
+
+          <div class="card-body" *ngIf="isAdmin?true: post?.user?.id == userId && post?.id == showedAnswerId">
+            <!--            {{post.user.id}}  {{userId}} {{post.id}}-->
+            <form [formGroup]="answerReactiveForm" (submit)="onSubmitAnswer(post.id)" *ngIf="answerReactiveForm">
+              <h3>Write answer</h3>
+              <!--              <div class="form-group">-->
+              <!--                <label for="answer-title">Title</label>-->
+              <!--                <input class="form-control" type="text" id="answer-title" formControlName="title"/>-->
+              <!--              </div>-->
+              <div class="form-group">
+                <label for="answer-message">Message</label>
+                <input class="form-control" type="text" id="answer-message" formControlName="message"/>
+              </div>
+
+              <button class="btn btn-primary" type="submit">Send</button>
+
+            </form>
+          </div>
+
+        </div>
+        <button type="button"  class="delete-post btn btn-outline-primary btn-sm " *ngIf="post?.user_id == userId || isAdmin"
+                (click)="deletePost(post?.id)">Delete post
+        </button>
+
+      </div>
 
       <div class="card-body">
-        <form [formGroup]="messageReactiveForm" (submit)="onSubmit()" *ngIf="messageReactiveForm">
+        <form [formGroup]="messageReactiveForm" (submit)="onSubmitPost()" *ngIf="messageReactiveForm">
+          <h3>Write post</h3>
           <div class="form-group">
             <label for="title">Title</label>
             <input class="form-control" type="text" id="title" formControlName="title"/>
@@ -44,31 +105,7 @@
         </form>
       </div>
 
+
     </div>
-
   </div>
-</div>
 
-<!--</div>-->
-
-<!--</div>-->
-
-<!--<p>-->
-<!--  <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">-->
-<!--    Ссылка с href-->
-<!--  </a>-->
-<!--  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">-->
-<!--    Кнопка с data-target-->
-<!--  </button>-->
-<!--</p>-->
-<!--<div class="collapse" id="collapseExample">-->
-<!--  <div class="card card-body">-->
-<!--    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.-->
-<!--  </div>-->
-<!--</div>-->
-<!--<div>123</div>-->
-<!--<li *ngFor="let hero of heroes">-->
-<!--  <a routerLink="/detail/{{hero.id}}">-->
-<!--    <span class="badge">{{hero.id}}</span> {{hero.name}}-->
-<!--  </a>-->
-<!--</li>-->
