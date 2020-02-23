@@ -15,7 +15,6 @@ export class RegistrationComponent implements OnInit {
   user: any; // данные вводимого пользователя
   receivedUser: any; // полученный пользователь
   done = false;
-  avatar : string
 
   constructor(private fb: FormBuilder, private httpService: HttpService,  private router: Router) {
   }
@@ -29,18 +28,18 @@ export class RegistrationComponent implements OnInit {
   onSubmit() {
     const controls = this.mySecondReactiveForm.controls;
 
-    /** Проверяем форму на валидность */
+    // /** Проверяем форму на валидность */
     if (this.mySecondReactiveForm.invalid) {
       console.log('форма не валдина');
-      /** Если форма не валидна, то помечаем все контролы как touched*/
+      // /** Если форма не валидна, то помечаем все контролы как touched*/
       Object.keys(controls)
         .forEach(controlName => controls[controlName].markAsTouched());
 
-      /** Прерываем выполнение метода*/
+      // /** Прерываем выполнение метода*/
       return;
     }
 
-    /** TODO: Обработка данных формы */
+    // /** TODO: Обработка данных формы */
     console.log(this.mySecondReactiveForm.value);
 
     this.httpService.postNewUser(this.mySecondReactiveForm.value)
@@ -62,19 +61,24 @@ export class RegistrationComponent implements OnInit {
   initForm() {
     this.mySecondReactiveForm = this.fb.group({
 
-      avatar: [null, Validators.required],
+      avatar: [null],
 
       name: ['vasya', [
         Validators.required,
-        Validators.pattern(/[A-z]/)
+        Validators.pattern(/[A-z]/),
+        Validators.maxLength(255)
       ]
       ],
       email: ['test@gmail.com', [
-        Validators.required, Validators.email
+        Validators.required,
+        Validators.email,
+        Validators.maxLength(255)
       ]
       ],
       password: ['12345678', [
-        Validators.required
+        Validators.required,
+        Validators.minLength(8),
+        Validators.maxLength(255)
       ]
       ],
       password_confirmation: ['12345678', [

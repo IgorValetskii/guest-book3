@@ -25,7 +25,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
   userId: string;
   answers: any;
   isAdmin: boolean;
-
   showedAnswerId: string;
   avatar: string;
 
@@ -45,6 +44,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.profileService.getPosts()
       .subscribe(
         (data: any) => {
+          console.log(data);
           this.receivedData = data.data;
           console.log(this.receivedData);
 
@@ -215,12 +215,24 @@ export class ProfileComponent implements OnInit, OnDestroy {
   getAnswers(postId) {
     this.showedAnswerId = postId;
     this.profileService.getAnswers(postId)
-      .subscribe(data => {
+      .subscribe((data: any) => {
+        console.log(data);
+        if (data.data[0]) {
+          console.log(123);
+          this.answers = data;
+
+        }
+        // console.log(this.answers.data);
+
+
+      });
+  }
+
+  getAnswersByLink(link) {
+    this.profileService.getAnswersByLink(link)
+      .subscribe((data: any) => {
         console.log(data);
         this.answers = data;
-        console.log(this.answers.data);
-
-
       });
   }
 
@@ -252,13 +264,5 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     console.log('сработал ондестрой');
   }
-
-  //  getAnswers(event) {
-  //    // this.httpService.getAnswers(this.postId);
-  // // {{post.user.id}}
-  //
-  //    console.log(event);
-  //    // console.log(id);
-  //  }
 
 }

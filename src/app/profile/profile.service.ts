@@ -1,8 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 
-// import {AnswersService} from '../answers.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +13,6 @@ export class ProfileService {
   }
 
   getPosts() {
-    // return this.http.get('https://guest-book.naveksoft.com/api/v1/posts', {params: {page: '1'}});
     return this.http.get('https://guest-book.naveksoft.com/api/v1/posts');
   }
 
@@ -29,6 +26,10 @@ export class ProfileService {
 
   getAnswers(postId: any) {
     return this.http.get(`https://guest-book.naveksoft.com/api/v1/posts/${postId}/answers`);
+  }
+
+  getAnswersByLink(link: string){
+    return this.http.get(link);
   }
 
   deletePost(postId: any) {
