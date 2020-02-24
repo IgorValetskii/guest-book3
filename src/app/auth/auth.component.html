@@ -1,4 +1,14 @@
+<!--<ul class="nav">-->
+<!--  <li class="nav-item">-->
+<!--    <a class="nav-link active" routerLink="/login">Login</a>-->
+<!--  </li>-->
+<!--  <li class="nav-item">-->
+<!--    <a class="nav-link" routerLink="/registration">Registration</a>-->
+<!--  </li>-->
+<!--</ul>-->
 <div class="col-md-6 offset-md-3 mt-5">
+
+
   <div class="alert alert-info">
     Username: test_register@mail.com<br/>
     Password: 1q2w3e4r
@@ -10,7 +20,7 @@
         <input class="form-control" type="text" id="email" formControlName="email"/>
         <br/><br/>
         <div class="error" *ngIf="isControlInvalid('email')">
-          Некорректный email
+          Incorrect email!
         </div>
       </div>
 
@@ -18,7 +28,14 @@
         <label for="password">Password</label>
         <input class="form-control" type="text" id="password" formControlName="password"/>
         <br/><br/>
+        <div class="error" *ngIf="isControlInvalid('password')">
+          Password length must be 8 and more symbols!
+        </div>
+        <div class="error" *ngIf="incorrectData">Incorrect email or password!</div>
       </div>
+
+
+
       <button class="btn btn-primary" type="submit">Send</button>
 
       <!--    <div>{{myFirstReactiveForm.value | json}} </div>-->

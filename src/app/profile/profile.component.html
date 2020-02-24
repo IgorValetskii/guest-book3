@@ -17,7 +17,7 @@
 
         <div class="user-block">
           <div class="user">
-            <img src="{{post.user.avatar}}" alt="Avatar">
+            <img src="{{post.user.avatar}}" alt="Avatar" *ngIf="post.user.avatar !=='https://guest-book.naveksoft.com/storage/'">
             <div class="user-name">{{post.user?.name }} </div>
             <div class="user-email"> {{post.user?.email}}</div>
           </div>
@@ -34,7 +34,7 @@
 
                   <div class="user-answer-block">
                     <div class="user-answer">
-                      <img src="{{answer.user.avatar}}" alt="Avatar">
+                      <img src="{{answer.user.avatar}}" alt="Avatar" *ngIf="answer.user.avatar !=='https://guest-book.naveksoft.com/storage/'">
                       <div class="user-name">{{answer.user?.name}}</div>
                       <div class="user-email"> {{answer.user?.email}}</div>
                     </div>

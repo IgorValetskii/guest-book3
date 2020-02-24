@@ -17,9 +17,10 @@ export class AuthComponent implements OnInit {
   user: User; // данные вводимого пользователя
   receivedUser: any; // полученный пользователь
   done = false;
-  error = '';
+  error: any;
   returnUrl: string;
   myFirstReactiveForm: FormGroup;
+  incorrectData: false;
 
 
   constructor(private fb: FormBuilder,
@@ -49,7 +50,8 @@ export class AuthComponent implements OnInit {
       ]
       ],
       password: ['12345678', [
-        Validators.required
+        Validators.required,
+        Validators.minLength(8),
       ]
       ],
 
@@ -83,7 +85,11 @@ export class AuthComponent implements OnInit {
         },
         error => {
           this.error = error;
-          console.log(this.error);
+          console.log(this.error.error.errors.credentials[0]);
+
+          if (this.error.error.errors.credentials[0] == 'incorrect credentials') {
+            this.incorrectData = this.error.error.errors.credentials[0];
+          }
           console.log('неверный пасс');
           // this.loading = false;
         });

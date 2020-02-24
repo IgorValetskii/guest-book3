@@ -1,12 +1,11 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 
-// import {WebsocketService} from '../websocket/websocket.service';
 import {SocketEchoService} from '../socket-echo.service';
 import {ProfileService} from './profile.service';
-import {WS} from '../websocket/websocket.events';
 import {Router} from '@angular/router';
 import {AuthenticationService} from '../auth/auth.service';
+import {BehaviorSubject} from 'rxjs';
 
 export interface IMessage {
   id: number;
@@ -27,6 +26,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   isAdmin: boolean;
   showedAnswerId: string;
   avatar: string;
+  mySubscription: BehaviorSubject<any>;
 
   constructor(
     private fb: FormBuilder,
@@ -72,7 +72,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     this.initForm();
 
-    this.socketEchoService.subject
+    this.mySubscription = this.socketEchoService.subject
       .subscribe(
         v => {
 
@@ -86,7 +86,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
             }
           }
           console.log(this.authenticationService.user);
-          console.log(this.authenticationService.user._value.user.id);
+          // console.log(this.authenticationService.user._value.user.id);
           console.log(v.data.data.user_id);
 
           if (v && v.data.type === 'answer_added') {
@@ -190,14 +190,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
       );
   }
 
-  isControlInvalid(controlName: string): boolean {
-    const control = this.messageReactiveForm.controls[controlName];
-
-    const result = control.invalid && control.touched;
-
-    return result;
-  }
-
 
   deletePost(postId) {
     // console.log(postId);
@@ -242,10 +234,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     this.profileService.deleteAnswer(postId, answerId)
       .subscribe((data: any) => {
-          // const result = this.receivedData.filter(el => el.id !== answerId);
-          // this.receivedData = result;
-          // console.log(result);
-          // console.log(this.receivedData);
           console.log(data);
         },
         error => console.log(error)
@@ -260,8 +248,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   //
   ngOnDestroy() {
-    this.socketEchoService.subject.unsubscribe();
-
+    // this.socketEchoService.subject.unsubscribe();
+    this.mySubscription.unsubscribe();
     console.log('сработал ондестрой');
   }
 

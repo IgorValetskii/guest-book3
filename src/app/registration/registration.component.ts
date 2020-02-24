@@ -1,9 +1,19 @@
 import {Component, OnInit} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {FormGroup, FormBuilder, Validators, FormControl, FormGroupDirective, NgForm} from '@angular/forms';
 import {HttpService} from '../http.service';
 import {User} from '../user';
 
 import {Router} from '@angular/router';
+import { ErrorStateMatcher } from '@angular/material/core';
+
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const invalidCtrl = !!(control && control.invalid && control.parent.dirty);
+    const invalidParent = !!(control && control.parent && control.parent.invalid && control.parent.dirty);
+
+    return (invalidCtrl || invalidParent);
+  }
+}
 
 @Component({
   selector: 'app-registration',
@@ -16,7 +26,11 @@ export class RegistrationComponent implements OnInit {
   receivedUser: any; // полученный пользователь
   done = false;
 
-  constructor(private fb: FormBuilder, private httpService: HttpService,  private router: Router) {
+  matcher = new MyErrorStateMatcher();
+  private errorEmail: string;
+  private errorAvatar: string;
+
+  constructor(private fb: FormBuilder, private httpService: HttpService, private router: Router) {
   }
 
   mySecondReactiveForm: FormGroup;
@@ -53,7 +67,11 @@ export class RegistrationComponent implements OnInit {
           // console.log(this.receivedUser.token.access_token);
           // localStorage.setItem('access-token', this.receivedUser.token.access_token);
         },
-        error => console.log(error)
+        error => {
+          console.log(error);
+          error.error.errors.email ?  this.errorEmail = error.error.errors.email[0]  : null;
+          error.error.errors.avatar ? this.errorAvatar = error.error.errors.avatar[0] : null;
+        }
       );
 
   }
@@ -82,11 +100,13 @@ export class RegistrationComponent implements OnInit {
       ]
       ],
       password_confirmation: ['12345678', [
-        Validators.required
+        Validators.required,
+        Validators.minLength(8),
+        Validators.maxLength(255)
       ]
       ]
 
-    });
+    }, {validator: this.checkPasswords});
   }
 
   isControlInvalid(controlName: string): boolean {
@@ -95,6 +115,14 @@ export class RegistrationComponent implements OnInit {
     const result = control.invalid && control.touched;
 
     return result;
+  }
+
+  checkPasswords(group: FormGroup) { // here we have the 'passwords' group
+
+    const pass = group.get('password').value;
+    const confirmPass = group.get('password_confirmation').value;
+
+    return pass === confirmPass ? null : {notSame: true};
   }
 
 }
