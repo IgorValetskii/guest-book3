@@ -15,7 +15,7 @@
       <div class="form-group">
         <div class="custom-file">
           <label class="custom-file-label" for="avatar">Avatar</label>
-          <input class="custom-file-input" type="file" id="avatar" formControlName="avatar"/>
+          <input class="custom-file-input" type="file" id="avatar" formControlName="avatar" (change)="addAvatar($event)"/>
         </div>
       </div>
 

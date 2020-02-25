@@ -17,7 +17,8 @@
 
         <div class="user-block">
           <div class="user">
-            <img src="{{post.user.avatar}}" alt="Avatar" *ngIf="post.user.avatar !=='https://guest-book.naveksoft.com/storage/'">
+            <img src="{{post.user.avatar}}" alt="Avatar"
+                 *ngIf="post.user.avatar !=='https://guest-book.naveksoft.com/storage/'">
             <div class="user-name">{{post.user?.name }} </div>
             <div class="user-email"> {{post.user?.email}}</div>
           </div>
@@ -34,7 +35,8 @@
 
                   <div class="user-answer-block">
                     <div class="user-answer">
-                      <img src="{{answer.user.avatar}}" alt="Avatar" *ngIf="answer.user.avatar !=='https://guest-book.naveksoft.com/storage/'">
+                      <img src="{{answer.user.avatar}}" alt="Avatar"
+                           *ngIf="answer.user.avatar !=='https://guest-book.naveksoft.com/storage/'">
                       <div class="user-name">{{answer.user?.name}}</div>
                       <div class="user-email"> {{answer.user?.email}}</div>
                     </div>
@@ -97,6 +99,21 @@
 
       </div>
 
+      <div class="btn-group" role="group" aria-label="Basic example" *ngIf="metaData.last_page !== 1">
+        <button type="button" class="btn btn-secondary" [disabled]="links.first == null"
+                (click)="getPostsByLink(links.first)">First
+        </button>
+        <button type="button" class="btn btn-secondary" [disabled]="links.prev == null"
+                (click)="getPostsByLink(links.prev)">Prev
+        </button>
+        <button type="button" class="btn btn-secondary" [disabled]="links.next == null"
+                (click)="getPostsByLink(links.next)">Next
+        </button>
+        <button type="button" class="btn btn-secondary" [disabled]="links.last == null"
+                (click)="getPostsByLink(links.last)">Last
+        </button>
+      </div>
+
       <div class="card-body">
         <form [formGroup]="messageReactiveForm" (submit)="onSubmitPost()" *ngIf="messageReactiveForm">
           <h3>Write post</h3>
@@ -117,4 +134,4 @@
 
     </div>
   </div>
-
+</div>

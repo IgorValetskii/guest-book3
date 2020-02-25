@@ -32,6 +32,10 @@ export class ProfileService {
     return this.http.get(link);
   }
 
+  getPostsByLink(link:string){
+    return this.http.get(link);
+  }
+
   deletePost(postId: any) {
     return this.http.delete(`https://guest-book.naveksoft.com/api/v1/posts/${postId}`);
   }

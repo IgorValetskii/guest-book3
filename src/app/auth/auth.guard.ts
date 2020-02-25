@@ -23,9 +23,9 @@ export class AuthGuard implements CanActivate {
 
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    console.log(route, state);
+    // console.log(route, state);
 
-    console.log(12323);
+    // console.log(12323);
 
     ////////////если PROFILE
     if (!this.publicUrls.includes(state.url)) {
@@ -33,11 +33,11 @@ export class AuthGuard implements CanActivate {
 
       this.authenticationService.user$.subscribe(user => {
         if (user) {
-          console.log('юзер есть в локалсторадже, переходим на профиль');
-          console.log(user);
+          // console.log('юзер есть в локалсторадже, переходим на профиль');
+          // console.log(user);
           return true;
         } else {
-          console.log('нету юзера  переходим на логин');
+          // console.log('нету юзера  переходим на логин');
           this.router.navigate(['/login']);
 
           return false;

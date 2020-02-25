@@ -17,7 +17,7 @@ export class HttpService {
     return this.http.post('https://guest-book.naveksoft.com/api/v1/auth/login', { email, password});
   }
 
-  postNewUser(user: User) {
+  postNewUser(user:any) {
     // const body = {email: user.email, password: user.password};
     return this.http.post('https://guest-book.naveksoft.com/api/v1/auth/register', user);
   }

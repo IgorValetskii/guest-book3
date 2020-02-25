@@ -18,11 +18,11 @@ export class SocketEchoService {
     this.authenticationService.user$.subscribe(user => {
       if (user){
         console.log('соединение к вебсокетам');
-        console.log(user.user.id)
+        // console.log(user.user.id)
         this.initConnection(user.user.id);
       } else {
         console.log('отключение вебсокетов');
-        this.subject.unsubscribe();
+        // this.subject.unsubscribe();
       }
     })
   }
@@ -64,7 +64,7 @@ export class SocketEchoService {
 
     this.echo.channel(`posts`)      ///// будет такой рабочий канал
       .listen('PublicPush', (e) => {
-        console.log(e);
+        // console.log(e);
         this.subject.next(e);
       });
 

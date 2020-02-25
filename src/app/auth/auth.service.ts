@@ -12,11 +12,11 @@ import {User} from '../user';
 
 export class AuthenticationService {
   user$ = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('currentUser')));
-  private _user = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('currentUser'))); /// КОСТЫЛЬ !!! НА пока что )
+  private _user; /// КОСТЫЛЬ !!! НА пока что )
 
   public get user(): any {
-    console.log('сработал геттер юзера');
-    console.log(this._user);
+    // console.log('сработал геттер юзера');
+    // console.log(this._user);
     return this._user;
   }
 

@@ -51,7 +51,7 @@ export class AuthComponent implements OnInit {
       ],
       password: ['12345678', [
         Validators.required,
-        Validators.minLength(8),
+        // Validators.minLength(8),
       ]
       ],
 

@@ -27,6 +27,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
   showedAnswerId: string;
   avatar: string;
   mySubscription: BehaviorSubject<any>;
+  authorMessageId: number;
+  currentUserId: number;
+  messageId = 0;
+  metaData: any;
+  links: any;
 
   constructor(
     private fb: FormBuilder,
@@ -46,7 +51,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
         (data: any) => {
           console.log(data);
           this.receivedData = data.data;
-          console.log(this.receivedData);
+          this.metaData = data.meta;
+          this.links = data.links;
+          // console.log(this.receivedData);
 
           this.userName = JSON.parse(localStorage.getItem('currentUser')).user.name;
           this.userId = JSON.parse(localStorage.getItem('currentUser')).user.id;
@@ -57,10 +64,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
           } else {
             this.isAdmin = false;
           }
-          console.log(this.isAdmin);
+          // console.log(this.isAdmin);
 
 
-          console.log(this.userName);
+          // console.log(this.userName);
 
           // this.socketEchoService.initConnection();
 
@@ -77,30 +84,118 @@ export class ProfileComponent implements OnInit, OnDestroy {
         v => {
 
           // console.log(this.authenticationService.user._value.user);
-          console.log(1);
-          if (v && v.data.type === 'post_added') {
-            console.log(2);
-            if (this.authenticationService.user._value.user && this.authenticationService.user._value.user.id !== v.data.data.user_id) {
-              console.log(3);
+          console.log(v);
+
+          if (v && v.data.data.user_id && v.data.type === 'post_added') {
+            this.authorMessageId = v.data.data.user_id;
+            console.log('автор поста');
+            console.log(this.authorMessageId);
+
+            if (this.authorMessageId !== this.currentUserId && (this.messageId !== v.data.data.id)) {
+              // console.log(v.data.data);
+              this.messageId = v.data.data.id;
+              console.log(this.messageId);
               this.receivedData.push(v.data.data);
             }
           }
-          console.log(this.authenticationService.user);
-          // console.log(this.authenticationService.user._value.user.id);
-          console.log(v.data.data.user_id);
 
-          if (v && v.data.type === 'answer_added') {
-            console.log(4);
+          if (v.data.type === 'answer_added'){
+            console.log(123);
+          }
+          if (v && v.data.data.user_id && v.data.type === 'answer_added') {
+            this.authorMessageId = v.data.data.user_id;
+            console.log('автор поста');
+            console.log(this.authorMessageId);
+            console.log(this.currentUserId);
 
-            if (this.authenticationService.user._value.user && this.authenticationService.user._value.user.id !== v.data.data.user_id) {
-              console.log(5);
-              console.log(this.answers.data);
+            if (this.authorMessageId !== this.currentUserId && (this.messageId !== v.data.data.id)) {
+              // console.log(v.data.data);
+              this.messageId = v.data.data.id;
+              console.log(this.messageId);
               this.answers.data.push(v.data.data);
             }
           }
+          // if (v && v.data.data.user_id && v.data.type === 'post_added') {
+          //   console.log(2);
+          //
+          //   this.authenticationService.user$
+          //     .subscribe(el => {
+          //
+          //       if (el) {
+          //         console.log('пришел бихейвиор юзер');
+          //         console.log(el);
+          //         if (v.data && el.user.id !== v.data.data.user_id) {
+          //           console.log(el.user.id);
+          //           console.log(v.data.data.user_id);
+          //           // console.log(v.data);
+          //           console.log('пушим');
+          //           this.receivedData.push(v.data.data);
+          //         }
+          //       }
+          //
+          //     });
+          //   // if (this.authenticationService.user.id !== v.data.data.user_id) {
+          //   // console.log(3);
+          //   // this.receivedData.push(v.data.data);
+          // }
+
+          // if (v && v.data.data.user_id && v.data.type === 'answer_added') {
+          //
+          //
+          //   this.authenticationService.user$
+          //     .subscribe(el => {
+          //
+          //       if (el) {
+          //         console.log('пришел бихейвиор юзер');
+          //         console.log(el);
+          //         if (v.data && el.user.id !== v.data.data.user_id) {
+          //
+          //               this.answers.data.push(v.data.data);
+          //         //   console.log(el.user.id);
+          //         //   console.log(v.data.data.user_id);
+          //         //   // console.log(v.data);
+          //         //   console.log('пушим');
+          //         //   this.receivedData.push(v.data.data);
+          //         }
+          //       }
+          //
+          //     });
+          // }
+
+          // if (v && v.data.type === 'post_added') {
+          //   console.log(2);
+          //   console.log(v);
+          //   if (this.authenticationService.user && this.authenticationService.user.id !== v.data.data.user_id) {
+          //     console.log(3);
+          //     this.receivedData.push(v.data.data);
+          //   }
+          // }
+          // console.log(this.authenticationService.user);
+          // console.log(this.authenticationService.user._value.user.id);
+          // console.log(v.data.data.user_id);
+
+          // if (v && v.data.type === 'answer_added') {
+          //   console.log(4);
+          //
+          //   if (this.authenticationService.user.user && this.authenticationService.user.user.id !== v.data.data.user_id) {
+          //     console.log(5);
+          //     console.log(this.answers.data);
+          //     this.answers.data.push(v.data.data);
+          //   }
+          // }
 
         }
       );
+
+    this.authenticationService.user$
+      .subscribe(el => {
+        if (el && el.user.id) {
+          this.currentUserId = el.user.id;
+          console.log('текущий пользак');
+          console.log(this.currentUserId);
+        }
+      });
+
   }
 
   initForm() {
@@ -182,8 +277,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.profileService.postAnswer(this.answerReactiveForm.value, postId)
       .subscribe(
         (data: any) => {
-          this.answers.data.push(data);
           console.log(data);
+          /////////////////...........КОСТЫЛЬ?
+          if(this.answers){
+            this.answers.data.push(data);
+          }
+
+
           // console.log(data.post_id);
         },
         error => console.log(error)
@@ -209,6 +309,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.profileService.getAnswers(postId)
       .subscribe((data: any) => {
         console.log(data);
+        console.log(this.answers);
+        // this.answers = data;
         if (data.data[0]) {
           console.log(123);
           this.answers = data;
@@ -225,6 +327,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
       .subscribe((data: any) => {
         console.log(data);
         this.answers = data;
+      });
+  }
+
+
+  getPostsByLink(link) {
+    this.profileService.getPostsByLink(link)
+      .subscribe((data: any) => {
+        console.log(data);
+        this.receivedData = data.data;
       });
   }
 
@@ -246,10 +357,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.router.navigate(['/login']);
   }
 
-  //
+//
   ngOnDestroy() {
     // this.socketEchoService.subject.unsubscribe();
-    this.mySubscription.unsubscribe();
+    if (this.mySubscription) {
+      this.mySubscription.unsubscribe();
+    }
+
     console.log('сработал ондестрой');
   }
 
